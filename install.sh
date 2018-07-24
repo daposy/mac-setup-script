@@ -2,15 +2,12 @@
 
 # Install some stuff before others!
 important_casks=(
-  dropbox
   google-chrome
   hyper
-  jetbrains-toolbox
   istat-menus
   spotify
   franz
   visual-studio-code
-  java8
 )
 
 brews=(
@@ -26,113 +23,33 @@ brews=(
   git
   git-extras
   git-fresh
-  git-lfs
-  "gnuplot --with-qt"
-  "gnu-sed --with-default-names"
-  go
-  gpg
-  haskell-stack
   hh
   #hosts
   htop
-  httpie
-  iftop
-  "imagemagick --with-webp"
-  lighttpd
-  lnav
-  m-cli
-  mackup
-  macvim
   mas
-  micro
-  moreutils
-  mtr
-  ncdu
-  nmap
-  node
-  poppler
-  postgresql
-  pgcli
-  pv
-  python
-  python3
-  osquery
-  ruby
-  scala
-  sbt
-  shellcheck
+  nvm
+  pyenv
   stormssh
-  teleport
+  stormssh-completion
   thefuck
-  tmux
-  tree
-  trash
-  "vim --with-override-system-vi"
-  #volumemixer
   "wget --with-iri"
 )
 
 casks=(
-  adobe-acrobat-reader
-  airdroid
+  alfred
   android-platform-tools
   cakebrew
-  cleanmymac
   docker
   firefox
-  geekbench
-  google-backup-and-sync
-  github-desktop
-  handbrake
-  iina
-  istat-server  
-  launchrocket
-  kap-beta
-  qlcolorcode
-  qlmarkdown
-  qlstephen
-  quicklook-json
-  quicklook-csv
   macdown
-  microsoft-office
-  muzzle
-  path-finder
   plex-media-player
-  plex-media-server
-  private-eye
-  satellite-eyes
-  sidekick
-  skype
-  slack
-  sloth
-  steam
-  transmission
-  transmission-remote-gui
-  tunnelbear
-  xquartz
 )
 
 pips=(
   pip
-  glances
-  ohmu
-  pythonpy
 )
 
-gems=(
-  bundler
-  travis
-)
-
-npms=(
-  fenix-cli
-  gitjk
-  kill-tabs
-  n
-)
-
-gpg_key='3E219504'
-git_email='pathikritbhowmick@msn.com'
+git_email='endqwerty@gmail.com'
 git_configs=(
   "branch.autoSetupRebase always"
   "color.ui auto"
@@ -144,23 +61,16 @@ git_configs=(
   "rebase.autostash true"
   "rerere.autoUpdate true"
   "rerere.enabled true"
-  "user.name pathikrit"
+  "user.name daniel"
   "user.email ${git_email}"
   "user.signingkey ${gpg_key}"
-)
-
-vscode=(
-  rust-lang.rust
-  dragos.scala-lsp
-  lightbend.vscode-sbt-scala
-  alanz.vscode-hie-server
-  rebornix.Ruby
-  redhat.java
 )
 
 fonts=(
   font-fira-code
   font-source-code-pro
+  Inconsolata-for-Powerline
+  anonymous-pro
 )
 
 ######################################## End of app list ########################################
@@ -237,20 +147,11 @@ do
   git config --global ${config}
 done
 
-if [[ -z "${CI}" ]]; then
-  gpg --keyserver hkp://pgp.mit.edu --recv ${gpg_key}
-  prompt "Export key to Github"
-  ssh-keygen -t rsa -b 4096 -C ${git_email}
-  pbcopy < ~/.ssh/id_rsa.pub
-  open https://github.com/settings/ssh/new
-fi  
-
 prompt "Install software"
 install 'brew cask install' "${casks[@]}"
 
 prompt "Install secondary packages"
 install 'pip3 install --upgrade' "${pips[@]}"
-install 'gem install' "${gems[@]}"
 install 'npm install --global' "${npms[@]}"
 install 'code --install-extension' "${vscode[@]}"
 brew tap caskroom/fonts
@@ -265,7 +166,6 @@ sudo chsh -s "$(brew --prefix)"/bin/bash
 
 prompt "Update packages"
 pip3 install --upgrade pip setuptools wheel
-m update install all
 
 if [[ -z "${CI}" ]]; then
   prompt "Install software from App Store"
@@ -276,5 +176,4 @@ prompt "Cleanup"
 brew cleanup
 brew cask cleanup
 
-echo "Run [mackup restore] after DropBox has done syncing ..."
 echo "Done!"
